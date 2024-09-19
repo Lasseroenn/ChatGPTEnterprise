@@ -22,73 +22,15 @@ description: A csharp sample app that chats with your data using OpenAI and AI S
 ---
 <!-- YAML front-matter schema: https://review.learn.microsoft.com/en-us/help/contribute/samples/process/onboarding?branch=main#supported-metadata-fields-for-readmemd -->
 
-## Table of Contents
-
-- [Features](#features)
-- [Application Architecture](#application-architecture)
-- [Azure account requirements](#account-requirements)
-- [Getting Started](#getting-started)
-  - [Cost estimation](#cost-estimation)
-  - [Project setup](#project-setup)
-    - [GitHub Codespaces](#github-codespaces)
-    - [VS Code Dev Containers](#vs-code-remote-containers)
-    - [Local environment](#local-environment)
-  - [Deployment](#deployment)
-    - [Deploying from scratch](#deploying-from-scratch)
-    - [Deploying with existing Azure resources](#use-existing-resources)
-    - [Deploying again](#deploying-or-re-deploying-a-local-clone-of-the-repo)
-    - [Deploying App Spaces](#deploying-your-repo-using-app-spaces)
-    - [Running locally](#running-locally)
-    - [Sharing environments](#sharing-environments)
-    - [Clean up resources](#clean-up-resources)
-  - [Using the app](#using-the-app)
-- [Enabling optional features](#enabling-optional-features)
-  - [Enabling Application Insights](#enabling-optional-features)
-  - [Enabling authentication](#enabling-authentication)
-  - [Enable GPT-4V support](#enable-gpt-4v-support)
-- [Productionizing](#productionizing)
-- [Resources](#resources)
-- [FAQ](#faq)
-
 # ChatGPT + Enterprise data with Azure OpenAI and Azure AI Search (.NET)
 
 ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/Azure-Samples/azure-search-openai-demo-csharp/dotnet-build.yml?label=BUILD%20%26%20TEST&logo=github&style=for-the-badge)
 [![Open in GitHub - Codespaces](https://img.shields.io/static/v1?style=for-the-badge&label=GitHub+Codespaces&message=Open&color=brightgreen&logo=github)](https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=624102171&machine=standardLinux32gb&devcontainer_path=.devcontainer%2Fdevcontainer.json&location=WestUs2)
 [![Open in Remote - Containers](https://img.shields.io/static/v1?style=for-the-badge&label=Remote%20-%20Containers&message=Open&color=blue&logo=visualstudiocode)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/azure-samples/azure-search-openai-demo-csharp)
 
-This sample demonstrates a few approaches for creating ChatGPT-like experiences over your own data using the Retrieval Augmented Generation pattern. It uses Azure OpenAI Service to access the ChatGPT model (`gpt-4o-mini`), and Azure AI Search for data indexing and retrieval.
-
-The repo includes sample data so it's ready to try end-to-end. In this sample application, we use a fictitious company called Contoso Electronics, and the experience allows its employees to ask questions about the benefits, internal policies, as well as job descriptions and roles.
-
-![RAG Architecture](docs/appcomponents.png)
-
-For more details on how this application was built, check out:
-
-- [Transform your business with smart .NET apps powered by Azure and ChatGPT blog post](https://aka.ms/build-dotnet-ai-blog)
-- [Build Intelligent Apps with .NET and Azure - Build Session](https://build.microsoft.com/sessions/f8f953f3-2e58-4535-92ae-5cb30ef2b9b0)
-
-We want to hear from you! Are you interested in building or currently building intelligent apps? Take a few minutes to complete this survey.
-
-[**Take the survey**](https://aka.ms/dotnet-build-oai-survey)
-
-## Features
-
-- Voice Chat, Chat and Q&A interfaces
-- Explores various options to help users evaluate the trustworthiness of responses with citations, tracking of source content, etc.
-- Shows possible approaches for data preparation, prompt construction, and orchestration of interaction between model (ChatGPT) and retriever (Azure AI Search)
-- Settings directly in the UX to tweak the behavior and experiment with options
-
-![Chat screen](docs/chatscreen.png)
-
-## Application architecture
-
-- **User interface** - The application’s chat interface is a [Blazor WebAssembly](https://learn.microsoft.com/aspnet/core/blazor/) application. This interface is what accepts user queries, routes request to the application backend, and displays generated responses.
-- **Backend** - The application backend is an [ASP.NET Core Minimal API](https://learn.microsoft.com/aspnet/core/fundamentals/minimal-apis/overview). The backend hosts the Blazor static web application and what orchestrates the interactions among the different services. Services used in this application include:
-   - [**Azure AI Search**](https://learn.microsoft.com/azure/search/search-what-is-azure-search) – indexes documents from the data stored in an Azure Storage Account. This makes the documents searchable using [vector search](https://learn.microsoft.com/azure/search/search-get-started-vector) capabilities. 
-   - [**Azure OpenAI Service**](https://learn.microsoft.com/azure/ai-services/openai/overview) – provides the Large Language Models to generate responses. [Semantic Kernel](https://learn.microsoft.com/semantic-kernel/whatissk) is used in conjunction with the Azure OpenAI Service to orchestrate the more complex AI workflows.
+This is my personal adaptation of the Microsoft sample application for creating ChatGPT-like experiences over your own data using the Retrieval Augmented Generation pattern. It uses Azure OpenAI Service to access the ChatGPT model (`gpt-4o-mini`), and Azure AI Search for data indexing and retrieval.
 
 ## Getting Started
-
 ### Account Requirements
 
 In order to deploy and run this example, you'll need
@@ -102,18 +44,6 @@ In order to deploy and run this example, you'll need
 ### Project setup
 
 You have a few options for setting up this project. The easiest way to get started is GitHub Codespaces, since it will setup all the tools for you, but you can also set it up [locally](#local-environment) if desired.
-
-#### GitHub Codespaces
-
-You can run this repo virtually by using GitHub Codespaces, which will open a web-based VS Code in your browser:
-
-[![Open in GitHub - Codespaces](https://img.shields.io/static/v1?style=for-the-badge&label=GitHub+Codespaces&message=Open&color=brightgreen&logo=github)](https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=624102171&machine=standardLinux32gb&devcontainer_path=.devcontainer%2Fdevcontainer.json&location=WestUs2)
-
-#### VS Code Remote Containers
-
-A related option is VS Code Remote Containers, which will open the project in your local VS Code using the [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension:
-
-[![Open in Remote - Containers](https://img.shields.io/static/v1?style=for-the-badge&label=Remote%20-%20Containers&message=Open&color=blue&logo=visualstudiocode)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/azure-samples/azure-search-openai-demo-csharp)
 
 #### Local environment
 
